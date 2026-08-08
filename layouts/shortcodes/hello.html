@@ -1,0 +1,127 @@
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #666666; /* 灰色背景 */
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .svg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeOut 1s ease-out 3s forwards; /* 3秒后开始1秒淡出 */
+        }
+        
+
+        
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                visibility: visible;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* SVG动画样式 */
+        @keyframes grow {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes letterAppear {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hello-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 8vw; /* 响应式字体大小 */
+            font-weight: bold;
+            fill: #3498db;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            animation: grow 1.5s ease-out forwards;
+        }
+        
+        .letter {
+            opacity: 0;
+            animation: letterAppear 0.8s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- SVG动画容器 -->
+    <div class="svg-container">
+        <svg width="100%" height="100%" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
+            <style>
+                .hello-text {
+                    font-size: 120px;
+                }
+            </style>
+            
+            <!-- Hello文字 -->
+            <text x="500" y="300" class="hello-text">
+                <tspan class="letter" style="animation-delay: 0.1s">H</tspan>
+                <tspan class="letter" style="animation-delay: 0.2s">e</tspan>
+                <tspan class="letter" style="animation-delay: 0.3s">l</tspan>
+                <tspan class="letter" style="animation-delay: 0.4s">l</tspan>
+                <tspan class="letter" style="animation-delay: 0.5s">o</tspan>
+            </text>
+            
+            <!-- 装饰性圆点 -->
+            <circle cx="200" cy="100" r="8" fill="#e74c3c">
+                <animate attributeName="r" values="0;12;8" dur="1s" begin="0.5s" fill="freeze"/>
+                <animate attributeName="opacity" values="0;1" dur="0.5s" begin="0.5s" fill="freeze"/>
+            </circle>
+            
+            <circle cx="800" cy="500" r="8" fill="#2ecc71">
+                <animate attributeName="r" values="0;12;8" dur="1s" begin="0.7s" fill="freeze"/>
+                <animate attributeName="opacity" values="0;1" dur="0.5s" begin="0.7s" fill="freeze"/>
+            </circle>
+            
+            <circle cx="100" cy="450" r="5" fill="#f39c12">
+                <animate attributeName="r" values="0;10;5" dur="1s" begin="0.9s" fill="freeze"/>
+                <animate attributeName="opacity" values="0;1" dur="0.5s" begin="0.9s" fill="freeze"/>
+            </circle>
+        </svg>
+    </div>

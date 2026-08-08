@@ -1,0 +1,266 @@
+<input 
+  type="text" 
+  id="searchInput" 
+  placeholder="输入关键词搜索..." 
+  autofocus
+  style="width: 100%; max-width: 640px; padding: 14px 18px; font-size: 16px; border: 1px solid #d1d5db; border-radius: 10px; outline: none; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: border-color 0.15s ease, box-shadow 0.15s ease; box-sizing: border-box; font-family: inherit;"
+>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.20.0/algoliasearch-lite.umd.min.js"></script>
+
+<div class="search-container" style="width: 100%; max-width: 640px;">
+    <div id="results" style="width: 100%; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; box-shadow: 0 6px 16px rgba(0,0,0,0.05);"></div>
+</div>
+
+<script>
+    (function() {
+      const client = algoliasearch('JUURF3UCQ3', '7f3aae8bdab21bad66ed18587a42349b');
+      const index = client.initIndex('linserin_work_juurf3ucq3_articles');
+
+      const input = document.getElementById('searchInput');
+      const resultsContainer = document.getElementById('results');
+
+      let hits = [];
+      let selectedIndex = -1;
+      const titleCache = new Map();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialQuery = urlParams.get('q') || '';
+      input.value = initialQuery;
+
+      // 为input添加focus样式
+      input.addEventListener('focus', function() {
+        this.style.borderColor = '#9ca3af';
+        this.style.boxShadow = '0 0 0 3px rgba(156,163,175,0.2)';
+      });
+      input.addEventListener('blur', function() {
+        this.style.borderColor = '#d1d5db';
+        this.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)';
+      });
+
+      function isUrl(str) {
+        if (!str || typeof str !== 'string') return false;
+        const trimmed = str.trim();
+        return /^https?:\/\//i.test(trimmed) || /^www\./i.test(trimmed);
+      }
+
+      function extractUrl(hit) {
+        const possibleUrls = [
+          hit.title,
+          hit.url,
+          hit.link,
+          hit.permalink,
+          hit.objectID
+        ];
+        
+        for (const url of possibleUrls) {
+          if (isUrl(url)) {
+            return url.trim().replace(/^www\./i, 'https://www.');
+          }
+        }
+        return null;
+      }
+
+      async function fetchPageTitle(url) {
+        if (titleCache.has(url)) {
+          return titleCache.get(url);
+        }
+
+        try {
+          const proxyUrl = encodeURI(url);
+          
+          const response = await fetch(proxyUrl, {
+            method: 'GET',
+            headers: {
+              'Accept': 'text/html',
+            },
+            signal: AbortSignal.timeout(5000)
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const html = await response.text();
+          
+          const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+          let title = titleMatch ? titleMatch[1].trim() : null;
+          
+          if (!title) {
+            const ogTitleMatch = html.match(/<meta[^>]*property="og:title"[^>]*content="([^"]*)"[^>]*>/i);
+            title = ogTitleMatch ? ogTitleMatch[1].trim() : null;
+          }
+          
+          if (title) {
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = title;
+            title = textarea.value;
+          }
+
+          const result = title || '无标题';
+          
+          titleCache.set(url, result);
+          
+          return result;
+        } catch (error) {
+          console.warn('获取标题失败:', url, error);
+          titleCache.set(url, '无法获取标题');
+          return '无法获取标题';
+        }
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function escapeAttr(text) {
+        return text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      function performSearch(query) {
+        if (!query) {
+          resultsContainer.innerHTML = '';
+          hits = [];
+          selectedIndex = -1;
+          return;
+        }
+        
+        index.search(query, { distinct: true }).then(async res => {
+          hits = res.hits;
+          selectedIndex = -1;
+          
+          renderResults();
+          fetchAllTitlesAsync();
+        }).catch(err => {
+          console.error('搜索失败:', err);
+          resultsContainer.innerHTML = '<div style="padding: 20px 18px; text-align: center; color: #9ca3af; font-size: 14px;">搜索失败，请稍后重试</div>';
+        });
+      }
+
+      async function fetchAllTitlesAsync() {
+        const fetchPromises = hits.map(async (hit, idx) => {
+          const url = extractUrl(hit);
+          if (url) {
+            const displayTitle = await fetchPageTitle(url);
+            hit._displayTitle = displayTitle;
+            hit._url = url;
+            updateResultItem(idx, displayTitle);
+          } else {
+            hit._displayTitle = hit.title || hit.name || '无标题';
+            hit._url = null;
+          }
+        });
+        
+        await Promise.allSettled(fetchPromises);
+      }
+
+      function updateResultItem(idx, newTitle) {
+        const item = resultsContainer.querySelector(`[data-index="${idx}"] .result-title`);
+        if (item) {
+          const url = hits[idx]._url;
+          if (url) {
+            item.innerHTML = `<a href="${escapeAttr(url)}" style="text-decoration: none;">${escapeHtml(newTitle)}</a>`;
+          } else {
+            item.innerHTML = escapeHtml(newTitle);
+          }
+        }
+      }
+
+      function renderResults() {
+        if (hits.length === 0) {
+          resultsContainer.innerHTML = '<div style="padding: 20px 18px; text-align: center; color: #9ca3af; font-size: 14px;">暂无结果</div>';
+          return;
+        }
+        
+        const resultsHtml = hits.map((hit, idx) => {
+          const title = hit._displayTitle || hit.title || hit.name || '无标题';
+          const url = hit._url || extractUrl(hit);
+          const desc = hit.description || hit.content || '';
+          
+          return `
+            <div class="result-item" data-index="${idx}" style="display: flex; align-items: flex-start; padding: 14px 18px; cursor: pointer; border-bottom: 1px solid #f3f4f6; gap: 12px; transition: box-shadow 0.12s ease;">
+              <div style="flex-shrink: 0; width: 20px; height: 20px; margin-top: 2px; color: #9ca3af;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-weight: 550; font-size: 15px; color: #111827; margin-bottom: 3px; word-break: break-word; line-height: 1.4;" class="result-title">
+                  ${url ? `<a href="${escapeAttr(url)}" style="text-decoration: none;">${escapeHtml(title)}</a>` : escapeHtml(title)}
+                </div>
+                ${desc ? `<div style="font-size: 13px; color: #6b7280; line-height: 1.4; word-break: break-word;">${escapeHtml(String(desc).slice(0, 120))}</div>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+        
+        const algoliaLogo = `
+          <div style="display: flex; justify-content: flex-end; padding: 12px 18px; font-size: 12px; color: #9ca3af;">
+            <a href="https://algolia.com" target="_blank" rel="noopener noreferrer">
+              <img src="https://crawler.algolia.com/mail/img/by-algolia.png" alt="Search by Algolia" style="height: 16px; opacity: 0.7;">
+            </a>
+          </div>
+        `;
+        
+        resultsContainer.innerHTML = resultsHtml + algoliaLogo;
+        
+        applyHighlight();
+      }
+
+      function applyHighlight() {
+        const items = resultsContainer.querySelectorAll('.result-item');
+        items.forEach(item => {
+          item.style.boxShadow = 'none';
+          item.style.borderRadius = '0';
+          item.style.backgroundColor = 'transparent';
+        });
+        if (selectedIndex >= 0 && selectedIndex < items.length) {
+          items[selectedIndex].style.boxShadow = 'inset 0 0 0 2px #9ca3af';
+          items[selectedIndex].style.backgroundColor = '#fff';
+        }
+      }
+
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (hits.length === 0) return;
+          selectedIndex = (selectedIndex + 1) % hits.length;
+          applyHighlight();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (hits.length === 0) return;
+          selectedIndex = (selectedIndex - 1 + hits.length) % hits.length;
+          applyHighlight();
+        } else if (e.key === 'Enter') {
+          if (selectedIndex >= 0 && hits[selectedIndex]) {
+            const hit = hits[selectedIndex];
+            const url = hit._url;
+            
+            if (url) {
+              window.open(url, '_blank');
+            } else {
+              console.log('选中项:', hit);
+            }
+          }
+        }
+      });
+
+      input.addEventListener('input', function(e) {
+        const query = e.target.value;
+        
+        // 更新URL中的查询参数
+        const url = new URL(window.location);
+        if (query) {
+          url.searchParams.set('q', query);
+        } else {
+          url.searchParams.delete('q');
+        }
+        window.history.replaceState({}, '', url);
+        
+        performSearch(query);
+      });
+
+      if (initialQuery) {
+        performSearch(initialQuery);
+      }
+    })();
+</script>

@@ -1,0 +1,21 @@
+baseURL = 'https://linserin.work/'
+languageCode = 'zh-CN'
+title = "Linserin Yang's Blog"
+theme = 'rusty-typewriter'
+[outputFormats]
+  [outputFormats.RSS]
+    mediaType = "application/rss+xml"
+    baseName = "rss"
+
+  [outputFormats.Markdown]
+    mediaType = "text/markdown"
+    baseName = "index"
+    isPlainText = true
+
+  [outputFormats.JSON]
+    mediaType = "application/json"
+    baseName = "index"
+    isPlainText = true
+[outputs]
+  page = ["HTML","Markdown","RSS"]
+  home = ["HTML","RSS","JSON"]

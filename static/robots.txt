@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /search/
+Disallow: /tags/
+Disallow: /categories/
+Disallow: /archives/
+
+Sitemap: https://itman-terminal.pages.dev/sitemap.xml
+
+# Algolia-Crawler-Verif: 180DB27293831D75

@@ -1,0 +1,31 @@
+
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\"?>" | safeHTML }}
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title>{{ .Site.Title }}</title>
+<link>{{ .Site.BaseURL }}</link>
+<atom:link href="{{ .Site.BaseURL }}rss.xml" rel="self" type="application/rss+xml"/>
+<description>{{ with .Site.Params.description }}{{ . }}{{ end }}</description>
+<generator>Hugo -- gohugo.io</generator>{{- range where (where site.RegularPages "Section" "posts") ".Params.rss" "!=" false }}
+{{- $content := .Content }}
+{{- $content = replaceRE `(href|src)="(/[^"]*)"` (printf `$1="%s$2"` .Site.BaseURL) $content }}
+{{- $content = replaceRE `(href)="(#[^"]*)"` (printf `$1="%s$2"` .Permalink) $content }}
+{{- $content = replaceRE `(?s)<script[^>]*>.*?</script>` "" $content }}
+{{- $content = replaceRE `(?s)<style[^>]*>.*?</style>` "" $content }}
+{{- $content = replaceRE `\s+style="[^"]*"` "" $content }}
+
+{{- $summary := .Summary }}
+{{- $summary = replaceRE `(?s)<script[^>]*>.*?</script>` "" $summary }}
+{{- $summary = replaceRE `(?s)<style[^>]*>.*?</style>` "" $summary }}
+{{- $summary = replaceRE `\s+style="[^"]*"` "" $summary }}
+{{- $summary = replaceRE `(href)="(#[^"]*)"` (printf `$1="%s$2"` .Permalink) $summary }}
+<item>
+<title>{{ .Title }}</title>
+<link>{{ .Permalink }}</link>
+<pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
+<guid isPermaLink="true">{{ .Permalink }}</guid>
+<description>{{ printf "<![CDATA[%s]]>" $summary | safeHTML }}</description>
+<content:encoded>{{ printf "<![CDATA[%s]]>" $content | safeHTML }}</content:encoded>
+</item>{{- end }}
+</channel>
+</rss>
