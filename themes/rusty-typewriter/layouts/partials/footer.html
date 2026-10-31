@@ -52,8 +52,6 @@
       {{- $HugoAnchor := .Site.Params.links.hugo | printf "<a href=\"%s\" target=\"_blank\">Hugo</a>" -}}
       {{- i18n "footer" (dict "ThemeAnchor" $ThemeAnchor "HugoAnchor" $HugoAnchor) | safeHTML -}}<br>
         <a href="https://github.com/Linserin/hugo-blog" target="_blank"><i class="fa-brands fa-github"></i> 站点源代码</a>
-
-<p>构建于 {{ now.Format "2006-01-02 15:04:05" }} Asia/Shanghai</p>
         <br>
     </div>
   </div>
