@@ -1,0 +1,19 @@
+{{- $bundle := resources.Match "js/_*.js" | resources.Concat "js/bundle.js" -}}
+{{- range (resources.Match "js/[!_]*.js" | append $bundle) }}
+  {{- if eq hugo.Environment "development" }}
+    {{- with . | js.Build }}
+      <script src="{{ .RelPermalink }}"></script>
+    {{- end }}
+  {{- else }}
+    {{- $opts := dict "minify" true }}
+    {{- with . | js.Build $opts | fingerprint }}
+      <script src="{{ .RelPermalink }}" integrity="{{- .Data.Integrity }}" crossorigin="anonymous"></script>
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- $search_lib := resources.Get "js/search/flexsearch.compact.js" | fingerprint -}}
+<script defer src="{{ $search_lib.RelPermalink }}" integrity="{{- $search_lib.Data.Integrity -}}"></script>
+{{ $p := dict "minify" true "params" (dict "searchLimit" (site.Params.searchLimit | default 20) "basePath" site.Home.RelPermalink) -}}
+{{- $search := resources.Get "js/search/search.js" | js.Build $p | fingerprint -}}
+<script defer src="{{ $search.RelPermalink }}" integrity="{{- $search.Data.Integrity -}}"></script>

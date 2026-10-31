@@ -20,14 +20,14 @@ title = '友链'
 ## 实用指南
 - [Linux 101 扫盲指南](https://101.lug.ustc.edu.cn/)
 >由中科大 LUG 成员编写的 Linux 扫盲指南
-## 小游戏
-- [吃豆人](https://garrit.xyz/posts/2026-06-13-pac-man-but-you-re-the-ghost) 
->但是你是幽灵
-- [劈柴](https://screen.toys/firewood)
+
 ## 工具
 
 - [IPInfo](https://ipinfo.io)
 >非常受欢迎的 IP 地址查询服务，还提供 Lite，无限量查询有限信息.
+
+- [自建 fastbin 剪贴板](https://paste.linserin.work)
+>想要自己建立一个？[GitHub Repository](https://github.com/linserin/fastbin-rewritten)
 
 - [MDN Playground](https://developer.mozilla.org/en-US/play)
 >Mozilla 提供的网页 Playground 预览

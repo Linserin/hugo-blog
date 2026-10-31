@@ -1,0 +1,195 @@
+{{- define "main" -}}
+  <div class="single-header">
+    {{- partial "components/breadcrumbs.html" . -}}
+    <h1>{{- partial "title.html" . -}}</h1>
+    {{- $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" -}}
+    {{- $dateHuman := .Date | time.Format ":date_long" -}}
+    <time class="dim" datetime="{{- $dateMachine -}}">{{- $dateHuman -}}</time>
+    {{- partial "components/tags.html" . -}}
+
+  </div>
+<a href="{{ .RelPermalink }}index.md" target=_blank class="md-source-link" title="View Markdown"><i class="fa-brands fa-markdown"></i> View Markdown
+</a>
+<hr></hr>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 获取所有标题元素
+  const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+  // 用于记录已使用的ID，避免重复
+  const usedIds = new Set();
+
+  // 辅助函数：根据文本生成合法的ID（保留原始大小写，处理特殊字符）
+  function generateId(text, usedIds) {
+    // 去除首尾空白，将非法字符（非字母数字、非中文、非下划线、非连字符）替换为连字符
+    let baseId = text.trim().replace(/[^\w\u4e00-\u9fa5-]/g, '-');
+    // 将多个连续的连字符替换为单个连字符
+    baseId = baseId.replace(/-+/g, '-');
+    // 去除首尾的连字符
+    baseId = baseId.replace(/^-|-$/g, '');
+    // 如果结果为空，使用默认前缀
+    if (!baseId) baseId = 'heading';
+    
+    // 确保ID唯一
+    let finalId = baseId;
+    let counter = 1;
+    while (usedIds.has(finalId)) {
+      finalId = `${baseId}-${counter}`;
+      counter++;
+    }
+    usedIds.add(finalId);
+    return finalId;
+  }
+
+  // 为每个标题添加链接图标
+  headings.forEach(heading => {
+    // 确保标题有ID
+    if (!heading.id) {
+      // 如果没有ID，基于文本内容生成一个
+      heading.id = generateId(heading.textContent, usedIds);
+    } else {
+      // 如果已有ID，也记录到usedIds中，避免后续生成重复
+      usedIds.add(heading.id);
+    }
+    
+    // 创建链接容器
+    const linkContainer = document.createElement('div');
+    linkContainer.className = 'heading-link-container';
+    linkContainer.style.display = 'inline';
+    linkContainer.style.marginLeft = '8px';
+    const linkIcon = document.createElement('a');
+    linkIcon.href = `#${heading.id}`;
+    linkIcon.className = 'heading-link';
+    linkIcon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>';
+    linkIcon.style.cursor = 'pointer';
+    linkIcon.style.opacity = '0.5';
+    linkIcon.style.transition = 'opacity 0.2s ease';
+    linkIcon.title = '章节链接';
+    // 确保链接样式不改变外观（如下划线、颜色等）
+    linkIcon.style.textDecoration = 'none';
+    linkIcon.style.color = 'inherit';
+    
+    heading.addEventListener('mouseenter', () => {
+      linkIcon.style.opacity = '1';
+    });
+    
+    heading.addEventListener('mouseleave', () => {
+      linkIcon.style.opacity = '0.5';
+    });
+    
+    linkContainer.appendChild(linkIcon);
+    // 将链接容器添加到标题中
+    heading.appendChild(linkContainer);
+  });
+});
+</script>
+<style>
+.heading-link-container {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.heading-link:hover {
+  opacity: 1 !important;
+}
+
+.heading-link svg {
+  display: block;
+}
+
+/* 为文章标题添加特殊样式 */
+.single-header h1 .heading-link-container {
+  margin-left: 12px;
+}
+
+.single-header h1 .heading-link svg {
+  width: 20px;
+  height: 20px;
+}
+</style>
+  <section class="page-section">
+    {{- .Content -}}
+  </section>
+
+  {{ if eq .Section "posts" }}
+    {{ $articleId := .Slug | default .File.BaseFileName }}
+    {{ if $articleId }}
+      
+    {{ end }}
+  {{ end }}
+<hr></hr>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css"
+  integrity="sha512-LFWtdAXHQuwUGH9cImO9blA3a3GfQNkpF2uRlhaOpSbDevNyK1rmAjs13mtpjvWyi+flP7zYWboqY+8Mkd42xA=="
+  crossorigin="anonymous"
+/>
+
+<script type="module">
+import PhotoSwipeLightbox from "https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe-lightbox.esm.min.js";
+const pswpModulePromise = import(
+  "https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.esm.min.js"
+);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.querySelector(".page-section");
+  if (!container) return;
+  const images = container.querySelectorAll("img");
+  images.forEach(img => {
+    if (img.parentElement.classList.contains("pswp-gallery")) return;
+    const width = img.naturalWidth;
+    const height = img.naturalHeight;
+    if (!width || !height) return;
+
+    const link = document.createElement("a");
+    link.href = img.currentSrc || img.src;
+    link.className = "pswp-gallery";
+    link.dataset.pswpWidth = width;
+    link.dataset.pswpHeight = height;
+    img.parentNode.insertBefore(link, img);
+    link.appendChild(img);
+  });
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: ".page-section",
+    children: "a.pswp-gallery",
+    pswpModule: () => pswpModulePromise,
+    showHideAnimationType: "zoom",
+  });
+
+  lightbox.init();
+});
+</script>
+
+<style>
+.page-section img {
+    cursor: zoom-in;
+}
+</style>
+<br>
+<br>
+<i class="fa-regular fa-comment"></i> 评论
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+<div id="waline-wrapper">
+  <div id="waline-loading" style="font-size: small; color: #888; margin: 0.5em 0;"></div>
+  <div id="waline"></div>
+</div>
+<script type="module">
+  import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+  const loadingEl = document.getElementById('waline-loading');
+  const walinePromise = init({
+    el: '#waline',
+    serverURL: 'https://comments.linserin.work',
+    dark: 'html[color-scheme="dark"]',
+    emoji: ['https://unpkg.com/@waline/emojis@1.4.0/tieba'],
+  });
+  walinePromise
+    .then(() => {
+      if (loadingEl) loadingEl.style.display = 'none';
+    })
+    .catch((err) => {
+      console.error('Waline ERROR:', err);
+      if (loadingEl) loadingEl.textContent = 'Please check the Console!';
+    });
+</script>
+{{- end -}}

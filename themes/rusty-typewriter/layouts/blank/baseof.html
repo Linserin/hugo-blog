@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body class="notransition">
+  <div id="container">
+    <header id="main-header">
+      {{- partial "header.html" . -}}
+      
+    </header>
+    <div class="flex grow">
+      <div id="main-pane">
+        <main id="main-content">
+          {{- .Content -}}
+        </main>
+        <footer id="main-footer">
+          {{- partial "footer.html" . -}}
+        </footer>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,219 @@
+/* main and native elements rules */
+
+html[color-scheme^='dark'] .dark-icon,
+html[color-scheme^='light'] .light-icon { 
+  display: none; 
+}
+
+html {
+  --bgc-transition: background-color 100ms ease-in;
+
+  scroll-behavior: smooth;
+  ::-moz-selection, ::selection {
+    background: var(--selection-color);
+  }
+}
+
+body {
+  margin: 0 !important;
+  width: 100%;
+  background-color: var(--body-background-color);
+  color: var(--body-text-color);
+  font-family: var(--font-family-main);
+  font-weight: var(--font-weight-main);
+  line-height: 1.5;
+  margin: 1rem;
+  transition: var(--bgc-transition);
+}
+
+
+div#container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 2rem);
+  max-width: fit-content;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+div#main-pane {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+aside#side-pane {
+  width: 224px;
+  height: fit-content;
+  padding: 1rem;
+  overflow: hidden;
+  border: var(--dim-color) 1px solid;
+  border-radius: 5px;
+  padding-top: 5px;
+}
+
+aside.side-sticky {
+  position: sticky;
+  top: 1rem;
+  bottom: 3rem;
+}
+
+header#main-header {
+  margin-bottom: 4rem;
+  border-bottom: 1px var(--dim-color) solid;
+}
+
+div#nav-menu {
+  display: flex
+}
+
+@media (max-width: 1128px) {
+  aside#side-pane {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  div#nav-dropdown-menu {
+    display: none
+  }
+}
+
+@media (max-width: 768px) {
+  div#nav-menu {
+    display: none;
+  }
+/* 强制 .show-md 在所有屏幕尺寸下都显示 */
+.show-md {
+    display: block !important;
+}
+  a#nav-dropdown-button {
+    display: unset !important;
+  }
+}
+
+a#nav-dropdown-button {
+  display: none;
+}
+
+div#nav-dropdown-menu {
+  position: relative;
+  top: 34px;
+  left: -28px;
+  width: 44px;
+  border-radius: 2px;
+  border: 1px var(--dim-color) solid;
+  padding: 0 0.3rem;
+  text-align: center;
+  background-color: var(--body-background-color);
+  transition: var(--bgc-transition);
+  z-index: 1000;
+  opacity: 1;
+  transform: scale(1);
+  visibility: visible;
+  transform-origin: top center;
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0.2s ease-out;
+}
+
+div#nav-dropdown-menu.hidden {
+  display: block;
+  opacity: 0;
+  transform: dropdown(0.95);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+div#nav-dropdown-menu .nav-item {
+  border-bottom: 1px solid var(--dim-color);
+}
+
+div#nav-dropdown-menu .nav-item:last-child {
+  border-bottom: none;
+}
+
+main#main-content {
+  flex-grow: 1;
+}
+
+main#main-content img {
+  max-width: 100%;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+footer#main-footer {
+  margin: 5rem auto 0;
+}
+
+section {
+  font-family: var(--font-family-content);
+  font-weight: var(--font-weight-content);
+  /* enlarge blog post text for better readability */
+  font-size: 1.125rem; /* ~18px */
+}
+
+section a {
+  text-decoration: underline;
+}
+
+a {
+  color: var(--primary-color);
+  transition: color 80ms;
+  text-decoration: none;
+  text-underline-offset: 4px;
+}
+
+a:hover {
+  color: color-mix(in lab, var(--primary-color) 60%, #fff 40%);
+}
+
+a > svg {
+  color: var(--body-text-color);
+  height: 22px;
+  width: 22px;
+  margin: 5px 5px 0;
+}
+
+blockquote {
+  padding-left: 25px; 
+  margin: auto 5px;
+  border-left: 6px var(--dim-color) solid; 
+}
+
+blockquote > p {
+  color: var(--quote-text-color);
+}
+
+table {
+  border: 1px var(--dim-color) solid; 
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px var(--dim-color) solid; 
+  padding: .2rem .5rem;
+}
+
+pre:has(code) {
+  display: grid;
+  overflow-x: auto;
+  padding: .8rem;
+  border-radius: .3rem;
+  color: var(--code-text-color);
+  background-color: var(--code-background-color) !important;
+  font-family: var(--font-family-code);
+}
+
+code {
+  font-family: var(--font-family-code);
+}
+
+:not(pre) > code {
+  padding: .3rem .3rem 0;
+  border-radius: .3rem;
+  color: var(--code-text-color);
+  background-color: var(--code-background-color) !important;
+}

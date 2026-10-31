@@ -1,10 +1,6 @@
 # Hugo-Blog
 This is the source code of [Linserin Yang's Blog](https://linserin.work).
 
- > [!WARNING]
-> You should go to the release page to obtain the full version of my Blog.
-
-
 ## Quick Start
 
 Download [Hugo](https://github.com/gohugoio/hugo/releases).

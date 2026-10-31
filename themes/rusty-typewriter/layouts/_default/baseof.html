@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
+{{ with .OutputFormats.Get "RSS" }}
+<link rel="alternate"
+      type="{{ .MediaType.Type }}"
+      href="https://linserin.work/posts/rss.xml"
+      title="{{ $.Site.Title }}">
+{{ end }}
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body class="notransition">
+  <div id="container">
+    <header id="main-header">
+      {{- partial "header.html" . -}}
+    </header>
+    <div class="flex grow">
+      <div id="main-pane">
+        <main id="main-content">
+          {{- block "main" . -}}{{- end -}}
+        </main>
+        <footer id="main-footer">
+          {{- partial "footer.html" . -}}
+        </footer>
+      </div>
+      {{- if (and (default true .Params.rtwt.sidePane) site.Params.rtwt.sidePane) -}}
+        {{- block "side" . -}}{{- end -}}
+      {{- end -}}
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<div>
+<footer style="text-align: center; padding: 2rem 1rem; margin-top: 3rem; border-top: 1px solid #eaecef;position: bottom">
+  <style>
+    .footer-links { display: flex; flex-direction: column; gap: 1rem; justify-content: center; align-items: center; }
+    .footer-links a { text-decoration: none; color: var(--body-text-color); display: flex; align-items: center; gap: 0.5rem; }
+    .footer-links a:hover { color: var(--primary-color); }
+
+  </style>
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+    <!-- 许可证部分 -->
+    <div>
+<p>
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+        <img src="/svg/license/CC-BY-NC-SA4.0.svg" alt="CC BY-NC-SA 4.0 License">
+      </a><a href="https://notbyai.fyi/cn/" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+<span id="badge-placeholder">Not By AI.</span></a></p>
+    </div>
+
+    <!-- 社交媒体链接 -->
+    <div class="footer-links">
+      <!-- Telegram -->
+      <a href="https://t.me/TheTeletype" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: var(--body-text-color); display: flex; align-items: center; gap: 0.5rem;">
+<i class="fa-brands fa-telegram"></i>
+        <span>Telegram</span>
+      </a>
+      
+      <!-- GitHub -->
+      <a href="https://github.com/Linserin" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: var(--body-text-color); display: flex; align-items: center; gap: 0.5rem;">
+<i class="fa-brands fa-github"></i>
+        <span>GitHub</span>
+      </a>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; width: 100%;">
+        <!-- RSS -->
+        <a href="/posts/rss.xml" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: var(--body-text-color); display: flex; align-items: center; gap: 0.5rem;">
+<i class="fa-solid fa-rss"></i>
+          <span>RSS</span>
+        </a>
+        <a href="https://discord.gg/3BGQr6D3Jw" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: var(--body-text-color); display: flex; align-items: center; gap: 0.5rem;">
+<i class="fa-brands fa-discord"></i>
+          <span>Discord</span>
+        </a>
+
+      </div>
+</footer>
+
+<div  class="footer">
+  <a href="#"><i class="fa-solid fa-angles-up"></i> 返回顶部</a>
+  <div class="footer-copyright">
+    <div class="dim">© {{ now.Year }} {{ .Site.Params.author.name }}</div>
+    <div>
+      {{- $ThemeAnchor := .Site.Params.links.theme | printf "<a href=\"%s\" target=\"_blank\">Rusty Typewriter</a>" -}}
+      {{- $HugoAnchor := .Site.Params.links.hugo | printf "<a href=\"%s\" target=\"_blank\">Hugo</a>" -}}
+      {{- i18n "footer" (dict "ThemeAnchor" $ThemeAnchor "HugoAnchor" $HugoAnchor) | safeHTML -}}<br>
+        <a href="https://github.com/Linserin/hugo-blog" target="_blank"><i class="fa-brands fa-github"></i> 站点源代码</a>
+
+<p>构建于 {{ now.Format "2006-01-02 15:04:05" }} Asia/Shanghai</p>
+        <br>
+    </div>
+  </div>
+</div>

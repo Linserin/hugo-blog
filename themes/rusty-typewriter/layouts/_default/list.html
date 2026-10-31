@@ -1,0 +1,26 @@
+{{- define "main" -}}
+  <h1>{{- partial "title.html" . -}}</h1>
+  {{- .Content -}}
+  
+  {{- $pages := (.Paginate (.Pages.GroupByDate "2006") site.Params.rtwt.countPageItems) -}}
+  {{- range $pages.PageGroups -}}
+    <div class="list-group-key">{{- .Key -}}</div>
+    {{- range .Pages -}}
+    
+      <div class="list-group-heading">
+        <a href="{{- .RelPermalink -}}">{{- partial "title.html" . -}}</a>
+        <time class="dim" style="float: right;" datetime="2023-05-02T00:00:00Z">
+          {{- dateFormat (or .Site.Params.dateFormat "Jan 2") .Date -}}
+        </time>
+      </div>
+      <div class="list-group-summary content-font">{{- partial "components/summary.html" . -}}</div>
+    {{- end -}}
+  {{- end -}}
+  {{ template "_internal/pagination.html" . }}
+{{- end -}}
+
+{{- define "side" -}}
+  <!-- <aside id="side-pane" class="{{- cond site.Params.rtwt.side.list.sidePaneSticky "side-sticky" "" -}}">
+    {{- partial "side/list.html" . -}}
+  </aside> -->
+{{- end -}}

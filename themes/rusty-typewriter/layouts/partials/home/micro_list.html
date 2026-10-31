@@ -1,0 +1,19 @@
+{{- $title := .title -}}
+{{- $items := .items -}}
+
+<h2>{{- $title -}}</h2>
+<div class="flat-list">
+  {{- range first (default 5 site.Params.rtw_theme.params.home.countRecent) $items -}}
+    <div class="flat-list-item">
+      <div>
+        <a href="{{- .RelPermalink -}}">{{- .LinkTitle -}}</a>
+        <time class="text-sm dim" style="float: right;" datetime="2023-05-02T00:00:00Z">
+          {{- dateFormat (or .Site.Params.dateFormat "January 2, 2006") .Date -}}
+        </time>
+      </div>
+      <small><p>{{- partial "components/summary.html" . -}}</p></small>
+    </div>
+  {{- end -}}
+</div>
+
+

@@ -1,0 +1,25 @@
+/* commonly reused rules */
+
+.notransition { transition: none !important }
+.hidden { display: none }
+
+/* 强制 .show-md 在所有屏幕尺寸下都显示 */
+.show-md {
+    display: block !important;
+}
+.flex { display: flex }
+.grow { flex-grow: 1 }
+
+.centered-container {
+  text-align: center;
+  margin: 3rem auto 5rem;
+  width: fit-content;
+}
+
+.dim { opacity: var(--dim-opacity); }
+.margin-sm { margin: .1rem; }
+.text-sm {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+

@@ -1,0 +1,37 @@
+<form onsubmit="searchBarSubmit(event)">
+  <div class="search-bar">
+    {{- partial "svg/search.svg" -}}
+    <input id="searchInput" type="text" placeholder="[/] Search posts..."/>
+  </div>
+</form>
+
+<script>
+  function searchBarSubmit(event) {
+    event.preventDefault();
+    const relativeUrl = `{{- absURL site.Params.rtwt.searchPath -}}/?q=${encodeURIComponent(event.target.elements['searchInput'].value)}`;
+    window.location.href = relativeUrl;
+  }
+  document.addEventListener('keydown', function(event) {
+    // 判断按下的键是否为 "/"
+    if (event.key === '/') {
+        // 如果当前焦点已经在输入框、文本域或可编辑元素中，不触发聚焦
+        const target = event.target;
+        if (target.tagName === 'INPUT' || 
+            target.tagName === 'TEXTAREA' || 
+            target.isContentEditable) {
+            return;
+        }
+
+        // 阻止 "/" 字符被输入到页面其他地方
+        event.preventDefault();
+
+        // 聚焦到你的搜索框
+        const searchBox = document.getElementById('searchInput');
+        if (searchBox) {
+            searchBox.focus();
+            // 可选：选中已有内容，方便直接覆盖输入
+            // searchBox.select();
+        }
+    }
+});
+</script>

@@ -1,0 +1,23 @@
+<div role="navigation" aria-label="Main">
+  <div class="nav-left">
+    <a href="{{- absURL "" -}}" style="color: inherit;">{{- site.Title -}}</a>
+  </div>
+  <div class="nav-right">
+    <div style="position:absolute;width:0px;height:0px;">
+      <div id="nav-dropdown-menu" class="hidden" href="#">
+        {{- partial "menu.html" (dict "menuID" "main" "page" .) -}}
+      </div>
+    </div>
+    <a id="nav-dropdown-button" href="#">
+      {{- partial "svg/menu.svg" -}}
+    </a>
+    <div id="nav-menu">
+      {{- partial "menu.html" (dict "menuID" "main" "page" .) -}}
+    </div>
+    <a id="theme-switcher" href="#">
+      {{- partial "svg/sun.svg" -}}
+      {{- partial "svg/moon.svg" -}}
+    </a>
+  </div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css" integrity="sha512-ApSLB1Pd3/bZN8fWB/RG9YhN/7bd9Hkf3AGaE2mPfebjrxagjuBtx2GcgdqIlJkUzwylBo61r9Xa9NmgBI0swA==" crossorigin="anonymous" referrerpolicy="no-referrer" />

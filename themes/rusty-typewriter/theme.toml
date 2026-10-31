@@ -1,0 +1,14 @@
+name = 'Rusty Typewriter'
+license = 'MIT'
+licenselink = 'https://github.com/math-queiroz/rusty-typewriter/LICENSE'
+description = 'A rusty hugo theme'
+
+homepage = 'https://github.com/math-queiroz/rusty-typewriter'
+demosite = 'https://rusty-typewriter.netlify.app/demo'
+
+tags = ["responsive", "minimal", "blog"]
+features = ["blog", "themes", "search"]
+
+[author]
+  name = 'Matheus Queiroz'
+  homepage = 'https://github.com/math-queiroz'

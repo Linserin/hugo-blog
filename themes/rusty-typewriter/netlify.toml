@@ -1,0 +1,18 @@
+[build.environment]
+  BASE_PATH = "demo"
+  HUGO_VERSION = "v0.122.0"
+  NODE_VERSION = "22"
+  TZ = "America/Sao_Paulo"
+
+[build]
+  base = "exampleSite/"
+  publish = "public"
+  command = """\
+    # dir should have theme name (or else it isn't found)
+    mv ../../{repo,rusty-typewriter} && \
+    hugo --gc --minify -b "$URL/$BASE_PATH" -d "public/$BASE_PATH" && \
+    mv ../../{rusty-typewriter,repo} && \
+    # file 404.html belongs to root dir
+    (mv public/$BASE_PATH/{favicon.svg,404.html,sitemap.xml,robots.txt} public || true)
+  """
+

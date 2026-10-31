@@ -1,0 +1,10 @@
+{{- with .GetTerms "tags" -}}
+  {{- $label := (index . 0).Parent.LinkTitle -}}
+  <div class="term-container">
+    {{- range . -}}
+      <div class="tag">
+        <a href="{{- .Permalink -}}">#{{- .Name -}}</a>
+      </div>
+    {{- end -}}
+  </ol>
+{{- end -}}

@@ -1,0 +1,32 @@
+{{- define "main" -}}
+  {{- .Content -}}
+  {{- partial "home/greetings.html" -}}
+
+  {{- $indexablePages := where site.RegularPages "Params.indexable" "ne" false -}}
+
+  <div style="width:95%;margin:0 auto;">
+    <div class="show-md" style="display:none;">
+      {{- partial "search_bar" . -}}
+    </div>
+
+    {{- $featured := where $indexablePages "Params.featured" true -}}
+    {{- if (and $featured site.Params.rtwt.home.showFeatured) -}}
+        {{- partial "home/micro_list.html" (dict "items" $featured "title" (i18n "featured_posts")) -}}
+    {{- end -}}
+    
+    {{- if and site.RegularPages site.Params.rtwt.home.showRecent -}}
+      {{- $recent := cond site.Params.rtwt.home.hideRecentWhenFeatured (where $indexablePages "Params.featured" "!=" true) site.RegularPages -}}
+        {{- partial "home/micro_list.html" (dict "items" $recent "title" (i18n "recent_posts")) -}}
+    {{- end -}}
+<a href="https://www.travellings.cn/go.html" target="_blank" rel="noopener" title="开往-友链接力">
+    <img src="https://www.travellings.cn/assets/logo.gif" alt="开往-友链接力" width="120">
+</a>
+  </div>
+{{- end -}}
+
+{{- define "side" -}}
+  <aside id="side-pane" class="{{- cond site.Params.rtwt.side.home.sidePaneSticky "side-sticky" "" -}}">
+    {{- partial "side/home.html" . -}}
+  </aside>
+
+{{- end -}}

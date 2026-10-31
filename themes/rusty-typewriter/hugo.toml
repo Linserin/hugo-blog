@@ -1,0 +1,81 @@
+[rusty_typewriter]
+ [params.rtwt]
+  sidePane = false
+  countPageItems = 7 
+  searchPath = 'search'
+ [params.rtwt.home]
+  showBio = false
+  showAuthorImg = false
+  sidePaneTags = true
+  showFeatured = true
+  showRecent = true
+  hideRecentWhenFeatured = true
+  countRecent = 5
+ [params.rtwt.side.home]
+  sidePaneSticky = false 
+  taxonomies = ['tags']
+  countTaxonomy = 6
+ [params.rtwt.side.list]
+  sidePaneSticky = false
+ [params.rtwt.side.single]
+  sidePaneSticky = true 
+  showDetails = true
+  showTableOfContents = true
+  showAttachments = true
+  showRelated = true
+  countRelated = 5
+
+[related]
+ includeNewer = true
+ [[related.indices]]
+  name = 'tags'
+  weight = 100
+
+[taxonomies]
+ tag = 'tags'
+
+[params]
+ summaryLength = 1
+
+[params.links]
+ hugo = 'https://gohugo.io/'
+ theme = 'https://github.com/math-queiroz/rusty-typewriter'
+
+[[menus.main]]
+ name = '文章'
+ pageRef = '/posts'
+ weight = 3
+[[menus.main]]
+ name = '友链'
+ pageRef = '/links'
+ weight = 6
+
+[[menus.main]]
+ name = '笔记'
+ pageRef = '/notes'
+ weight = 7
+[[menus.main]]
+ name = '分类'
+ pageRef = '/categories'
+ weight = 5
+
+ [[menus.main]]
+ name = '标签'
+ pageRef = '/tags'
+ weight = 4
+[[menus.main]]
+ name = '关于'
+ pageRef = '/about'
+ weight = 1
+
+[[menus.main]]
+ name = '搜索'
+ pageRef = '/search'
+ weight = 2
+
+
+[module]
+ [module.hugoVersion]
+  extended = false
+  min = "0.116.0"
+

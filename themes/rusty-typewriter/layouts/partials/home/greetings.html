@@ -1,0 +1,52 @@
+<script>document.addEventListener('DOMContentLoaded', function() {
+  // 原始标题
+  const originalTitle = document.title;
+  
+  // 随机标题列表
+  const randomTitles = [
+    "离婚19年，我在地铁站重遇前妻，摆摊的她说：儿子上了重点大学",
+    "老宫女被浸猪笼当天！五岁儿子掏出祖传玉佩惊呆县官，四十岁未婚妈妈秒变皇帝白月光",
+    "皇帝为贵妃扒我狐皮取心！我重生自请废后另嫁他人，他慌了跪求我原谅",
+    "史上最狂妻子！丈夫输光家产怕什么，妻子把丈夫踹下赌桌亲自上阵赢到对手破产！"
+  ];
+  
+  let titleChangeTimeout;
+  
+  // 获取随机标题
+  function getRandomTitle() {
+    const randomIndex = Math.floor(Math.random() * randomTitles.length);
+    return randomTitles[randomIndex];
+  }
+  
+  // 设置随机标题（带防抖）
+  function setRandomTitle() {
+    clearTimeout(titleChangeTimeout);
+    titleChangeTimeout = setTimeout(() => {
+      document.title = getRandomTitle();
+    }, 10); // 100ms 延迟，避免频繁切换时的闪烁
+  }
+  
+  // 立即恢复原始标题
+  function restoreOriginalTitle() {
+    clearTimeout(titleChangeTimeout);
+    document.title = originalTitle;
+  }
+  
+  // 监听页面可见性变化
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      // 页面不可见（切换到其他标签页）
+      setRandomTitle();
+    } else {
+      // 页面可见（切换回当前标签页）
+      restoreOriginalTitle();
+    }
+  });
+  
+  // 初始状态检查
+  if (document.hidden) {
+    setRandomTitle();
+  }
+});
+</script>
+
