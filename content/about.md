@@ -10,9 +10,17 @@ Linserin 是长期鼻炎与乳糖不耐受患者。
 
 Linserin 在这里发表自己很 wishful 的想法，折腾，以及生活中的一些事情，读了什么书，还有自己的思考。
 
-Linserin 一毛不拔的，宁愿把自己的服务跑在维护略困难的免费 Serverless 服务也不愿租一台 Lightsail.
+## Coding & Learning
 
-Linserin now Living in Guangdong.
+已经掌握：{{< html >}}<a href="https://golang.google.cn/" target=_blank>
+<i class="fa-brands fa-golang"></i></a>{{< /html >}}
+
+Plan:
+1. 学习一门编程语言（已达成，学习 {{< html >}}<a href="https://golang.google.cn/" target=_blank>
+<i class="fa-brands fa-golang"></i></a>{{< /html >}} ）
+2. 使用 Go 做些什么，即便只是 Yet Another 什么的（Ongoing）
+3. 深入学习前端世界
+
 
 ## The Site
 
@@ -76,8 +84,17 @@ Linserin now Living in Guangdong.
 ## Others
 搭建的服务：
 
+{{< html >}}
+<i class="fa-regular fa-file-code"></i>
+{{< /html >}}
 [PasteBin](https://paste.linserin.work)
 
+{{< html >}}
+<i class="fa-brands fa-hacker-news"></i>
+{{< /html >}}
+[Better HN - Hacker News 现代化前端](https://hn.linserin.work)
+
 {{< heatmap >}}
-[^1]: 本站点使用了 [SourceHanSansCN](https://fonts.adobe.com/fonts/source-han-sans-simplified-chinese) 和 [JetBrains Mono](https://www.jetbrains.com/lp/mono/) 作为文章和代码显示字体。源代码打包中包含了以上字体。以上字体使用 [SIL Open Font License 1.1](https://openfontlicense.org/) 协议授权。
+
+本站点使用了 [SourceHanSansCN](https://fonts.adobe.com/fonts/source-han-sans-simplified-chinese) 和 [JetBrains Mono](https://www.jetbrains.com/lp/mono/) 作为文章和代码显示字体。源代码仓库包含了以上字体。以上字体使用 [SIL Open Font License 1.1](https://openfontlicense.org/) 协议授权。
 

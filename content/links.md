@@ -26,8 +26,17 @@ title = '友链'
 - [IPInfo](https://ipinfo.io)
 >非常受欢迎的 IP 地址查询服务，还提供 Lite，无限量查询有限信息.
 
-- [自建 fastbin 剪贴板](https://paste.linserin.work)
->想要自己建立一个？[GitHub Repository](https://github.com/linserin/fastbin-rewritten)
+- {{< html >}}
+<i class="fa-regular fa-file-code"></i>
+{{< /html >}}
+[PasteBin](https://paste.linserin.work)
+
+- {{< html >}}
+<i class="fa-brands fa-hacker-news"></i>
+{{< /html >}}
+[Better HN - Hacker News 现代化前端](https://hn.linserin.work)
 
 - [MDN Playground](https://developer.mozilla.org/en-US/play)
 >Mozilla 提供的网页 Playground 预览
+
+- [Font Awesome Search](https://fontawesome.com/search?q=code&ic=free-collection)
