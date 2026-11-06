@@ -1,0 +1,103 @@
+{{- if not (.Page.Scratch.Get "spoiler-assets") -}}
+{{- .Page.Scratch.Set "spoiler-assets" true -}}
+<style>
+.spoiler {
+  --spoiler-mask-bg: #d4d4d8;
+  cursor: pointer;
+  padding: .02em .18em;
+  border-radius: .22em;
+  color: transparent;
+  background-color: var(--spoiler-mask-bg);
+  transition: color .45s ease, background-color .45s ease;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  outline: none;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.spoiler:hover,
+.spoiler:focus-visible,
+.spoiler.is-revealed {
+  color: inherit;
+  background-color: transparent;
+  user-select: auto;
+}
+
+[data-spoiler-theme="dark"] .spoiler {
+  --spoiler-mask-bg: #3a3a42;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-spoiler-theme="light"]) .spoiler {
+    --spoiler-mask-bg: #3a3a42;
+  }
+}
+</style>
+<script>
+(function () {
+  "use strict";
+
+  const getCachedTheme = () => {
+    const theme = document.body.getAttribute("color-scheme");
+    const cachedTheme = localStorage.getItem("color-scheme");
+    if (cachedTheme) {
+      return cachedTheme;
+    } else if (theme !== "dark" && theme !== "light") {
+      const preferDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      return preferDark ? "dark" : "light";
+    } else {
+      return theme;
+    }
+  };
+
+  const applyTheme = () => {
+    const theme = getCachedTheme();
+    const root = document.documentElement;
+    if (root.getAttribute("data-spoiler-theme") !== theme) {
+      root.setAttribute("data-spoiler-theme", theme);
+    }
+  };
+
+  const boot = () => {
+    applyTheme();
+
+    window.addEventListener("storage", (e) => {
+      if (e.key === "color-scheme") applyTheme();
+    });
+    const mo = new MutationObserver(applyTheme);
+    mo.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["color-scheme", "data-theme"],
+    });
+
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    if (mq.addEventListener) mq.addEventListener("change", applyTheme);
+    else if (mq.addListener) mq.addListener(applyTheme);
+
+    document.addEventListener("click", (e) => {
+      if (e.target.closest("a, button")) return;
+      const el = e.target.closest(".spoiler");
+      if (el) el.classList.toggle("is-revealed");
+    });
+
+    // 键盘：Enter / Space 切换
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      const el = e.target.closest(".spoiler");
+      if (!el) return;
+      e.preventDefault();
+      el.classList.toggle("is-revealed");
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+{{- end -}}
+
+<span class="spoiler" tabindex="0" role="button" aria-label="被遮罩的内容，悬停或点击显示">{{ .Inner }}</span>
