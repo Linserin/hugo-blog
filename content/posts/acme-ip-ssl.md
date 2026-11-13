@@ -18,7 +18,7 @@ curl https://raw.githubusercontent.com/acmesh-official/acme.sh/master/acme.sh -o
 cd /tmp
 chmod +x ./acme.sh
 ./acme.sh  --install
-mv ./acme.sh /usr/local/bin/acme.sh
+rm ./acme.sh
 ```
 
 ## 开放端口
