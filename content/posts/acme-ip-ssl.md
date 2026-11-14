@@ -66,7 +66,7 @@ Unknown parameter: --certificate-profile
 ```bash
 mkdir -p /etc/nginx/ssl
 
-acme.sh --install-cert -d 192.0.2.2 \
+acme.sh --install-cert -d 1**.1**.2**.**3 \
   --key-file       /etc/nginx/ssl/ip.key  \
   --fullchain-file /etc/nginx/ssl/ip.crt \
   --ca-file        /etc/nginx/ssl/ip.ca.crt \
