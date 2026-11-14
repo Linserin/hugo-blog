@@ -79,7 +79,40 @@ acme.sh --install-cert -d 1**.1**.2**.**3 \
     ssl_certificate /etc/nginx/ssl/ip.crt;
     ssl_certificate_key /etc/nginx/ssl/ip.key;
 ```
-并且配置好 HTTP - - > HTTPS 重定向（推荐）
+## 配置 HTTP - - > HTTPS
+这个时候通过 HTTP 访问会发现回复 `400 Bad Request`, 但是 Nginx 不能同时监听 HTTP 和 HTTPS. 此时利用错误码 497 进行重定向就是一个替代方法。
+
+原理是利用了 497 错误码页面，设置 HTTPS 监听端口为 3333 后，如果用 HTTP 访问 `http://1**.1**.2**.**3:3333`，触发了 497 错误码，随后将此错误处理设置为重定向即可。
+
+```nginx
+server {
+    listen 8002 ssl default_server;
+    server_name _;
+    ssl_certificate     /etc/nginx/ssl/ip.crt;
+    ssl_certificate_key /etc/nginx/ssl/ip.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # 497 - - > 301 - - > HTTPS
+    error_page 497 =301 https://$host:8002$request_uri;
+
+    location / {
+        proxy_pass http://upstream_802;
+        proxy_http_version 1.1;
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade    $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+    }
+}
+```
+需要确保此配置文件中没有监听 HTTP 的 server.
+
+如果需要保留请求方法，使用 `307`.
+
 
 ## Reference
 - [烧饼博客 - Showfom](https://be.st/kQJK)
